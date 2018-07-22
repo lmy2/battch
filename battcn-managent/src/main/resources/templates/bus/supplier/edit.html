@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
+    });
+    /*<![CDATA[*/
+    $(function () {
+        battcn.admin.menu[[${OP.menuId}]].save = function (obj) {
+            if ($("#menu[[${OP.menuId}]]Form").valid()) {
+                battcn.ajaxJson({
+                    url: "/op_save_[[${OP.menuId}]]",
+                    data: $('#menu[[${OP.menuId}]]Form').serializeArray()
+                }, function () {
+                    battcn.closeWindow();
+                    battcn.reloadDiv('/op_list_[[${OP.menuId}]]');
+                });
+            }
+        }
+    });
+    //加载省市
+    cityInit();
+    /*]]>*/
+
+</script>
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <form class="form-horizontal m-t required-validate" th:id="@{menu{menuId}Form(menuId=${OP.menuId})}">
+            <input type="hidden" name="id" th:value="${dto?.id}"/>
+            <div class="border-head">
+                <h3>企业名称</h3>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">公司全称：</label>
+                <div class="col-sm-6">
+                    <input name="fullName" class="form-control" th:value="${dto?.fullName}"
+                           validate="{required:true,messages:{required:'请填写公司全称'}}"/>
+                </div>
+
+                <label class="col-sm-2 control-label">字母简称：</label>
+                <div class="col-sm-2">
+                    <input name="letterAbb" class="form-control" th:value="${dto?.letterAbb}"
+                    />
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">公司简称：</label>
+                <div class="col-sm-2">
+                    <input name="shortName" class="form-control" th:value="${dto?.shortName}"
+                    />
+                </div>
+                <label class="col-sm-2 control-label">企业类别：</label>
+                <div class="col-sm-2">
+                    <select class="form-control m-b"   name="type">
+                        <option value="">请选择</option>
+                        <option th:each="m : ${BUS_SUPPLIER}" th:value="${m?.id}" th:selected="${m.id == dto?.type.id}"
+                                th:text="${m.name}"></option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label">公司代码：</label>
+                <div class="col-sm-2">
+                    <input name="code" class="form-control" th:value="${dto?.code}"
+                    />
+                </div>
+            </div>
+            <div class="border-head">
+                <h3>开票信息</h3>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">统一社会信用代码：</label>
+                <div class="col-sm-3">
+                    <input name="scc" class="form-control" th:value="${dto?.scc}"
+                    />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">注册地址：</label>
+                <div class="col-sm-2">
+                    <select class="form-control" id="province" name="regAddressP" onchange="doProvAndCityRelation();"
+                            th:value="${dto?.regAddressP}" validate="{required:true,messages:{required:'请选择省份'}}">
+                        　　　　　　　　
+                        <option id="choosePro" value="">请选择省份</option>
+                        　　　　　　</select>
+
+                </div>
+                <div class="col-sm-2">
+                    <select id="citys"  class="form-control" name="regAddressC" onchange="doCityAndCountyRelation();" th:value="${dto?.regAddressC}">
+                        　　　　　　　　<option id='chooseCity' value=''>请选择城市</option>
+                        　　　　　　</select>
+                </div>
+                <div class="col-sm-4">
+                    <input name="regAddress" class="form-control" th:value="${dto?.regAddress}"
+                    />
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">电话：</label>
+                <div class="col-sm-2">
+                    <input name="tel" class="form-control" th:value="${dto?.tel}"
+                    />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">开户行：</label>
+                <div class="col-sm-2">
+                    <input name="account" class="form-control" th:value="${dto?.account}"
+                    />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">银行账户：</label>
+                <div class="col-sm-4">
+                    <input name="account" class="form-control" th:value="${dto?.account}"
+                    />
+                </div>
+            </div>
+            <div class="border-head">
+                <h3>发货信息</h3>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+					<textarea id="ccomment" name="remark" cols="55" rows="3"
+                              class="form-control" th:text="${dto?.remark}"></textarea>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+</html>
