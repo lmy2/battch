@@ -63,51 +63,64 @@
                     align: 'center',
                     valign: 'middle',
                     sortable: true
-                },{
+                }, {
                     field: 'reg_address',
                     title: '注册地址',
                     align: 'center',
                     valign: 'middle',
                     sortable: true
-                },{
+                }, {
                     field: 'tel',
                     title: '联系电话',
                     align: 'center',
                     valign: 'middle',
                     sortable: true
-                },{
+                }, {
                     field: 'bank',
                     title: '开户行',
                     align: 'center',
                     valign: 'middle',
                     sortable: true
-                },{
+                }, {
                     field: 'account',
                     title: '银行账户',
                     align: 'center',
                     valign: 'middle',
                     sortable: true
-                },{
+                }, {
                     field: 'deleted',
                     title: '是否停用',
                     align: 'center',
                     valign: 'middle',
                     sortable: true,
-                    events: {'change .ss': function (e, value, row, index) {
+                    events: {
+                        'change .ss': function (e, value, row, index) {
                             var valueSelected = $(this).children('option:selected').val();
-                           alert("事件" + valueSelected);
+                            $.ajax({
+                                url: [[${MENU.channel}]] + "/update?id=" + row.id + "&deleted=" + valueSelected,
+                                data: {},
+                                success: function (data) {
+                                    console.info(data);
+                                    battcn.toastrsAlert({
+                                        code: data.messageId === 200 ? 'success' : 'error',
+                                        msg: data.message
+                                    });
+                                },
+                                error: function (xhr) {
+                                    console.info(xhr.responseText);
+                                }
+                            });
                         }
                     },
 
-                    formatter:function(value,row,index){
+                    formatter: function (value, row, index) {
 
                         var strHtml = "";
-                        if(value == 1)
-                        {
+                        if (value == 1) {
                             strHtml = "<select class='ss'><option value='0' >否</option><option value='1' selected='selected'>是</option></select>";
                         }
-                        else
-                        {  strHtml = "<select class='ss'><option value='0' selected='selected'>否</option><option value='1'>是</option></select>";
+                        else {
+                            strHtml = "<select class='ss'><option value='0' selected='selected'>否</option><option value='1'>是</option></select>";
 
                         }
                         return strHtml;
@@ -131,8 +144,9 @@
                 pageNum: params.offset / params.limit + 1,
                 sort: params.sort,
                 order: params.order,
-                search : params.search, //搜索
-                datetime: $("#datetime").val()
+                search: params.search, //搜索
+                regAddressP: $("#regAddressP").val(),
+                type: $("#type").val()
             }
         }
 
@@ -155,23 +169,23 @@
             });
         };
         //新增
-        battcn.admin.menu[[${OP.menuId}]].add = function(){
+        battcn.admin.menu[[${OP.menuId}]].add = function () {
             battcn.showWindow({
-                title:'录入供应商信息',
-                href:'op_edit_[[${OP.menuId}]]',
-                width:'50%',
-                height:'40%',
-                okhandler:function(){
+                title: '录入供应商信息',
+                href: 'op_edit_[[${OP.menuId}]]',
+                width: '80%',
+                height: '80%',
+                okhandler: function () {
                     battcn.admin.menu[[${OP.menuId}]].save();
                 },
-                cancelhandler:function(){
+                cancelhandler: function () {
                     battcn.closeWindow();
                 }
             });
         }
 
         //编辑
-        battcn.admin.menu[[${OP.menuId}]].edit = function() {
+        battcn.admin.menu[[${OP.menuId}]].edit = function () {
             var rows = $('#admin_menu[[${OP.menuId}]]_datagrid').bootstrapTable('getSelections');
             if (rows.length == 0) {
                 battcn.toastrsAlert({
@@ -192,16 +206,61 @@
                 href: '/op_edit_[[${OP.menuId}]]?id=' + rows[0].id,
                 width: '80%',
                 height: '80%',
-                okhandler: function () {o
+                okhandler: function () {
                     battcn.admin.menu[[${OP.menuId}]].save();
                 },
                 cancelhandler: function () {
                     battcn.closeWindow();
                 }
             });
-        }s
-
+        }
+        //删除
+        battcn.admin.menu[[${OP.menuId}]].remove = function () {
+            var rows = $('#admin_menu[[${OP.menuId}]]_datagrid').bootstrapTable('getSelections');
+            if (rows.length == 0) {
+                battcn.toastrsAlert({
+                    code: 'info',
+                    msg: '请选择你要删除的记录'
+                });
+                return;
+            }
+            battcn.confirm(function () {
+                var ps = [];
+                $.each(rows, function (i, n) {
+                    ps.push(n.id);
+                });
+                battcn.ajaxJson({
+                    url: '/op_remove_[[${OP.menuId}]]',
+                    data: {"ids": ps.join(",")}
+                }, function () {
+                    $('#admin_menu[[${OP.menuId}]]_datagrid').bootstrapTable('refresh');
+                });
+            });
+        }
     });
+    //查询
+    battcn.admin.menu[[${OP.menuId}]].search = function () {
+        $('#admin_menu[[${OP.menuId}]]_datagrid').bootstrapTable('refresh');
+
+    };
+
+    function pageInit() {
+        $.get("/codeList?code=BUS_SUPPLIER", function (data, status) {
+            if (data && data.length >= 1) {
+                var sb = new StringBuffer();
+                $.each(data,
+                    function (i, val) {
+                        sb.append("<option value='" + val.code + "'>" + val.name + "</option>");
+                    });
+                $("#code").after(sb.toString());
+            }
+        });
+    }
+
+    //加载省市
+    cityInit();
+    //加载类别
+    pageInit();
     /*]]>*/
 </script>
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -213,34 +272,41 @@
                         <div class="form-group" style="margin-top: 15px">
                             <label class="control-label col-sm-2">供应商类别</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="datetime"/>
+                                <select class="form-control" id="type" name="type">　　　　　　　　
+                                    <option id="code" value="">请选择类别</option>
+                                    　</select>
                             </div>
-                            <label class="control-label col-sm-2">省份</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="datetime"/>
-                            </div>
+
+                        <label class="control-label col-sm-2">省份</label>
+                        <div class="col-sm-4">
+                            <select class="form-control province" id="regAddressP"
+                                    name="regAddressP">
+                                　　　　　　　　
+                                <option class="choosePro" value="">请选择省份</option>
+                                　　　　　　</select>
                         </div>
-                        <div class="btn-group" style="margin-top: 15px">
-
-                                <button type="button"
-                                        th:onclick="@{battcn.admin.menu{menuId}.search()(menuId=${OP.menuId})}"
-                                        class="btn btn-primary">查询
-                                </button>
-
-
-                        </div>
-                    </form>
                 </div>
-            </div>
-            <div th:include="toolbar :: toolbar-operate"></div>
-            <div class="table-responsive">
-                <table th:id="@{admin_menu{menuId}_datagrid(menuId=${OP.menuId})}"
-                       data-toolbar="#toolbar" data-show-refresh="true"
-                       data-show-toggle="true" data-show-columns="true"
-                       data-show-footer="false" data-mobile-responsive="true">
-                </table>
+                <div class="btn-group" style="margin-top: 15px">
+
+                    <button type="button"
+                            th:onclick="@{battcn.admin.menu{menuId}.search()(menuId=${OP.menuId})}"
+                            class="btn btn-primary">查询
+                    </button>
+
+
+                </div>
+                </form>
             </div>
         </div>
+        <div th:include="toolbar :: toolbar-operate"></div>
+        <div class="table-responsive">
+            <table th:id="@{admin_menu{menuId}_datagrid(menuId=${OP.menuId})}"
+                   data-toolbar="#toolbar" data-show-refresh="true"
+                   data-show-toggle="true" data-show-columns="true"
+                   data-show-footer="false" data-mobile-responsive="true">
+            </table>
+        </div>
     </div>
+</div>
 </div>
 </html>

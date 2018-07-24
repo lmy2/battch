@@ -23,6 +23,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 
@@ -51,7 +52,7 @@ public class ManagerController extends BaseController {
 
     @ApiIgnore
     @GetMapping(value = "/edit")
-    public String edit(Integer id) {
+    public String edit(Integer id, HttpServletRequest request) {
         if (id != null) {
             request.setAttribute("dto", this.managerService.selectById(id).orElseThrow(() -> BattcnException.notFound("该数据已失效")));
         }

@@ -18,6 +18,8 @@ import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletRequest;
+
 import static com.battcn.framework.common.exception.BattcnException.notFound;
 
 
@@ -38,13 +40,13 @@ public class MenuController extends BaseController {
     }
 
     @GetMapping("/list")
-    public String list(DataGrid grid) {
+    public String list(DataGrid grid, HttpServletRequest request) {
         request.setAttribute("page", this.menuService.listMenuForDataGrid(grid));
         return "sys/menu/list";
     }
 
     @GetMapping(value = "/edit")
-    public String edit(Integer id) {
+    public String edit(Integer id, HttpServletRequest request) {
         if (id != null) {
             request.setAttribute("dto", this.menuService.selectById(id).orElseThrow(() -> notFound("该数据已失效")));
         }

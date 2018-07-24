@@ -2,16 +2,16 @@ package com.battcn.platform.pojo.po;
 
 import com.battcn.platform.pojo.RecordEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
+
 
 @Table(name = "t_bus_sendinfo")
 public class SendInfo extends RecordEntity {
     /**
      * 自增ID
      */
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Id
     private Integer id;
 
@@ -24,6 +24,18 @@ public class SendInfo extends RecordEntity {
      * 发货联系人
      */
     private Integer contact;
+
+    /**
+     * 发货地址省份
+     */
+    @Column(name = "address_p")
+    private String addressP;
+
+    /**
+     * 发货地址城市
+     */
+    @Column(name = "address_c")
+    private String addressC;
 
     /**
      * 联系电话
@@ -41,6 +53,19 @@ public class SendInfo extends RecordEntity {
      */
     @Column(name = "gmt_modified")
     private Date gmtModified;
+
+
+    private Company company;
+
+    public Company getCompany()
+    {
+        return company;
+    }
+
+    public void setCompany(Company company)
+    {
+        this.company = company;
+    }
 
     /**
      * 获取自增ID
@@ -94,6 +119,42 @@ public class SendInfo extends RecordEntity {
      */
     public void setContact(Integer contact) {
         this.contact = contact;
+    }
+
+    /**
+     * 获取发货地址省份
+     *
+     * @return address_p - 发货地址省份
+     */
+    public String getAddressP() {
+        return addressP;
+    }
+
+    /**
+     * 设置发货地址省份
+     *
+     * @param addressP 发货地址省份
+     */
+    public void setAddressP(String addressP) {
+        this.addressP = addressP == null ? null : addressP.trim();
+    }
+
+    /**
+     * 获取发货地址城市
+     *
+     * @return address_c - 发货地址城市
+     */
+    public String getAddressC() {
+        return addressC;
+    }
+
+    /**
+     * 设置发货地址城市
+     *
+     * @param addressC 发货地址城市
+     */
+    public void setAddressC(String addressC) {
+        this.addressC = addressC == null ? null : addressC.trim();
     }
 
     /**

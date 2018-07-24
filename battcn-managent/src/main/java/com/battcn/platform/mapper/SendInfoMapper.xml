@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.battcn.platform.mapper.SendInfoMapper">
+  <resultMap id="sendInfo" type="com.battcn.platform.pojo.po.SendInfo">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="contact" jdbcType="INTEGER" property="contact" />
+    <result column="address_p" jdbcType="VARCHAR" property="addressP" />
+    <result column="address_c" jdbcType="VARCHAR" property="addressC" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <!-- 多对一关系的时候，多方使用association标签映射一方，属性就是Student对象中定义的Teacher属性的名称。因为是对象类型，所以不能再直接使用column属性，需要使用另一个映射对象结果集合，该结果集合也是通过namespace.id指定。当然也可以不引用其他结果集合，在标签内部可以自己在定义临时的resultMap标签对象,比如id标签，result标签 -->
+    <association property="company"
+                 resultMap="com.battcn.platform.pojo.po.company"></association>
+
+  </resultMap>
+</mapper>

@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
+
 @Table(name = "t_bus_contact")
 public class Contact extends RecordEntity {
     /**

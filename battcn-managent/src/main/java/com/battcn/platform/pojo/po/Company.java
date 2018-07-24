@@ -6,12 +6,15 @@ import com.battcn.platform.pojo.RecordEntity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
+
 
 @Table(name = "t_bus_company")
 public class Company extends RecordEntity {
     /**
      * 自增ID
      */
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Id
     @Excel(name = "编号")
     private Integer id;
@@ -40,9 +43,7 @@ public class Company extends RecordEntity {
     /**
      * 企业类别
      */
-    @JoinColumn(name = "type")
-    @OneToOne
-    private SysCode type;
+    private String type;
 
     /**
      * 企业代码
@@ -64,9 +65,9 @@ public class Company extends RecordEntity {
     /**
      * 供应商S||客户C
      */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "flag")
-    private EnumStatus flag = EnumStatus.SUPPLIER;
+  //  @Enumerated(EnumType.STRING)
+   // @Column(name = "flag")
+   // private EnumStatus flag = EnumStatus.SUPPLIER;
 
     /**
      * 统一社会信用代码
@@ -210,7 +211,7 @@ public class Company extends RecordEntity {
     }
 
     /**
-     * 设置公司全称
+     * 设置公司全称2
      *
      * @param fullName 公司全称
      */
@@ -218,21 +219,13 @@ public class Company extends RecordEntity {
         this.fullName = fullName == null ? null : fullName.trim();
     }
 
-    /**
-     * 获取企业类别
-     *
-     * @return type - 企业类别
-     */
-    public SysCode getType() {
+    public String getType()
+    {
         return type;
     }
 
-    /**
-     * 设置企业类别
-     *
-     * @param type 企业类别
-     */
-    public void setType(SysCode type) {
+    public void setType(String type)
+    {
         this.type = type;
     }
 
@@ -259,18 +252,18 @@ public class Company extends RecordEntity {
      *
      * @return flag - 供应商S||客户C
      */
-    public EnumStatus getFlag() {
-        return flag;
-    }
+   // public EnumStatus getFlag() {
+   //     return flag;
+   // }
 
     /**
      * 设置供应商S||客户C
      *
      * @param flag 供应商S||客户C
      */
-    public void setFlag(EnumStatus flag) {
-        this.flag = flag;
-    }
+   // public void setFlag(EnumStatus flag) {
+    //    this.flag = flag;
+    //}
 
     /**
      * 获取统一社会信用代码
@@ -380,5 +373,15 @@ public class Company extends RecordEntity {
         this.remark = remark == null ? null : remark.trim();
     }
 
+    private Set<SendInfo> sendInfoSet;
 
+    public Set<SendInfo> getSendInfoSet()
+    {
+        return sendInfoSet;
+    }
+
+    public void setSendInfoSet(Set<SendInfo> sendInfoSet)
+    {
+        this.sendInfoSet = sendInfoSet;
+    }
 }

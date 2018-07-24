@@ -6,6 +6,8 @@ import com.battcn.platform.pojo.po.Company;
 import com.battcn.platform.pojo.po.SysCode;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 /**
  * @author Levin
  * @version 2.5.1

@@ -18,6 +18,7 @@ import com.github.pagehelper.PageInfo;
 
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 import static com.battcn.framework.common.exception.BattcnException.notFound;
@@ -46,14 +47,14 @@ public class RoleController extends BaseController {
     }
 
     @GetMapping("permissions")
-    public String permissions(Integer roleId) {
+    public String permissions(Integer roleId, HttpServletRequest request) {
         request.setAttribute("permissions", this.menuService.listPermissions());
         request.setAttribute("roleId", roleId);
         return "sys/role/permissions";
     }
 
     @GetMapping(value = "/edit")
-    public String edit(Integer id) {
+    public String edit(Integer id, HttpServletRequest request) {
         if (id != null) {
             request.setAttribute("dto", this.roleService.selectById(id).orElseThrow(() -> notFound("未找到记录")));
         }

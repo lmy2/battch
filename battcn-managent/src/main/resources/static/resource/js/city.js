@@ -3255,11 +3255,12 @@ var cityJson = [
                     sb.append("<option value='" + val.item_code + "'>" + val.item_name + "</option>");
                 }
             });
-        $("#choosePro").after(sb.toString());
+        $(".choosePro").after(sb.toString());
    }
     // 省值变化时 处理市
-    function doProvAndCityRelation() {
-        var city = $("#citys");
+    function doProvAndCityRelation(obj) {
+    var id = obj.id.split("_")[1];
+        var city = $("#" +id );
         //var county = $("#county");
         if (city.children().length > 1) {
             city.empty();
@@ -3267,23 +3268,18 @@ var cityJson = [
         //if (county.children().length > 1) {
         //  county.empty();
         //}
-        if ($("#chooseCity").length === 0) {
-            city.append("<option id='chooseCity' value='-1'>请选择城市</option>");
-        }
-        //if ($("#chooseCounty").length === 0) {
-        //  county.append("<option id='chooseCounty' value='-1'>请选择区/县</option>");
-        //}
+
         var sb = new StringBuffer();
         $.each(cityJson,
             function(i, val) {
-                if (val.item_code.substr(0, 2) == $("#province").val().substr(0, 2) && val.item_code.substr(2, 4) != '0000' && val.item_code.substr(4, 2) == '00') {
+                if (val.item_code.substr(0, 2) == $(obj).val().substr(0, 2) && val.item_code.substr(2, 4) != '0000' && val.item_code.substr(4, 2) == '00') {
                     sb.append("<option value='" + val.item_code + "'>" + val.item_name + "</option>");
                 }
             });
-        $("#chooseCity").after(sb.toString());
+        $("#choose" + id).after(sb.toString());
     } // 市值变化时 处理区/县
     function doCityAndCountyRelation() {
-        var cityVal = $("#citys").val();
+       // var cityVal = $("#citys").val();
         // var county = $("#county");
         //if (county.children().length > 1) {
         //   county.empty();
@@ -3291,19 +3287,19 @@ var cityJson = [
         // if ($("#chooseCounty").length === 0) {
         //   county.append("<option id='chooseCounty' value='-1'>请选择区/县</option>");
         // }
-        var sb = new StringBuffer();
-        $.each(cityJson,
-            function(i, val) {
-                if (cityVal == '110100' || cityVal == "120100" || cityVal == "310100" || cityVal == "500100") {
-                    if (val.item_code.substr(0, 3) == cityVal.substr(0, 3) && val.item_code.substr(4, 2) != '00') {
-                        sb.append("<option value='" + val.item_code + "'>" + val.item_name + "</option>");
-                    }
-                } else {
-                    if (val.item_code.substr(0, 4) == cityVal.substr(0, 4) && val.item_code.substr(4, 2) != '00') {
-                        sb.append("<option value='" + val.item_code + "'>" + val.item_name + "</option>");
-                    }
-                }
-            });
+        // var sb = new StringBuffer();
+        // $.each(cityJson,
+        //     function(i, val) {
+        //         if (cityVal == '110100' || cityVal == "120100" || cityVal == "310100" || cityVal == "500100") {
+        //             if (val.item_code.substr(0, 3) == cityVal.substr(0, 3) && val.item_code.substr(4, 2) != '00') {
+        //                 sb.append("<option value='" + val.item_code + "'>" + val.item_name + "</option>");
+        //             }
+        //         } else {
+        //             if (val.item_code.substr(0, 4) == cityVal.substr(0, 4) && val.item_code.substr(4, 2) != '00') {
+        //                 sb.append("<option value='" + val.item_code + "'>" + val.item_name + "</option>");
+        //             }
+        //         }
+        //     });
         //$("#chooseCounty").after(sb.toString());
 
     }

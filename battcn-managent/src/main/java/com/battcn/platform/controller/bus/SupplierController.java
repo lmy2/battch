@@ -13,6 +13,7 @@ import com.battcn.platform.pojo.po.Log;
 import com.battcn.platform.pojo.po.Menu;
 import com.battcn.platform.service.CompanyService;
 import com.battcn.platform.service.MenuService;
+import com.battcn.platform.service.SysCodeService;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
@@ -22,12 +23,15 @@ import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.util.Date;
@@ -46,7 +50,7 @@ public class SupplierController extends BaseController {
     @Autowired
     private  CompanyService companyService;
     @Autowired
-    private  MenuService menuService;
+    private SysCodeService sysCodeService;
 
     @RequestMapping(value = "/list")
     @BattcnLog(description = "进入供应商信息管理的页面", module = "业务管理-供应商信息管理", methods = "供应商信息列表")
@@ -65,12 +69,12 @@ public class SupplierController extends BaseController {
         return this.companyService.listForDataGrid(grid, company);
     }
     @GetMapping(value = "/edit")
-    public String edit(Integer id) {
+    public String edit(Integer id, HttpServletRequest request) {
         if (id != null) {
-            request.setAttribute("dto", this.companyService.selectById(id).orElseThrow(() -> notFound("未找到记录")));
+            request.setAttribute("dto", this.companyService.selectById(id));
         }
-        //下拉菜单--供应商类别
-        request.setAttribute("BUS_SUPPLIER", this.menuService.listMenu());
+        //下拉菜单--供应商类别2
+        request.setAttribute("BUS_SUPPLIER", this.sysCodeService.listByCate("BUS_SUPPLIER"));
         return "bus/supplier/edit";
     }
 
@@ -78,9 +82,11 @@ public class SupplierController extends BaseController {
     @PostMapping(value = "/save")
     @ResponseBody
     public ApiResult<String> save(Company company) {
+        company.setFlag2(EnumStatus.SUPPLIER.getCode());
         if (company != null) {
             this.companyService.saveOrUpdate(company);
         }
+
         return ApiResult.SUCCESS;
     }
 
@@ -89,6 +95,13 @@ public class SupplierController extends BaseController {
     @ResponseBody
     public ApiResult<String> del(Integer[] ids) {
         Lists.newArrayList(ids).forEach(this.companyService::deleteById);
+        return ApiResult.SUCCESS;
+    }
+    @BattcnLog(module = "业务管理-供应商信息管理", methods = "停用供应商", description = "停用供应商信息")
+    @GetMapping(value = "/update")
+    @ResponseBody
+    public ApiResult<String> update(Integer id,Integer deleted) {
+         this.companyService.updateDeletedById( id, deleted);
         return ApiResult.SUCCESS;
     }
     /**

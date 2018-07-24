@@ -32,4 +32,17 @@ public interface CompanyService extends BaseService<Company> {
      */
     void saveOrUpdate(Company company);
 
+    /**
+     * 停用数据
+     * @param id
+     * @param deleted
+     */
+    void updateDeletedById(Integer id,Integer deleted);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    Company selectById(Integer id);
 }

@@ -23,9 +23,26 @@ public class SendInfo extends RecordEntity {
     private Integer contact;
 
     /**
+     * 发货地址省份
+     */
+    @Column(name = "address_p")
+    private String addressP;
+
+    /**
+     * 发货地址城市
+     */
+    @Column(name = "address_c")
+    private String addressC;
+
+    /**
      * 联系电话
      */
     private String tel;
+
+    /**
+     * 所属公司
+     */
+    private Integer company;
 
     /**
      * 创建时间
@@ -94,6 +111,42 @@ public class SendInfo extends RecordEntity {
     }
 
     /**
+     * 获取发货地址省份
+     *
+     * @return address_p - 发货地址省份
+     */
+    public String getAddressP() {
+        return addressP;
+    }
+
+    /**
+     * 设置发货地址省份
+     *
+     * @param addressP 发货地址省份
+     */
+    public void setAddressP(String addressP) {
+        this.addressP = addressP == null ? null : addressP.trim();
+    }
+
+    /**
+     * 获取发货地址城市
+     *
+     * @return address_c - 发货地址城市
+     */
+    public String getAddressC() {
+        return addressC;
+    }
+
+    /**
+     * 设置发货地址城市
+     *
+     * @param addressC 发货地址城市
+     */
+    public void setAddressC(String addressC) {
+        this.addressC = addressC == null ? null : addressC.trim();
+    }
+
+    /**
      * 获取联系电话
      *
      * @return tel - 联系电话
@@ -109,6 +162,24 @@ public class SendInfo extends RecordEntity {
      */
     public void setTel(String tel) {
         this.tel = tel == null ? null : tel.trim();
+    }
+
+    /**
+     * 获取所属公司
+     *
+     * @return company - 所属公司
+     */
+    public Integer getCompany() {
+        return company;
+    }
+
+    /**
+     * 设置所属公司
+     *
+     * @param company 所属公司
+     */
+    public void setCompany(Integer company) {
+        this.company = company;
     }
 
     /**
