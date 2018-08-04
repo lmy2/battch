@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
+    });
+    /*<![CDATA[*/
+    $(function () {
+        battcn.admin.menu[[${OP.menuId}]].save = function (obj) {
+            if ($("#menu[[${OP.menuId}]]Form").valid()) {
+                battcn.ajaxJson({
+                    url: "/op_save_[[${OP.menuId}]]",
+                    data: $('#menu[[${OP.menuId}]]Form').serializeArray()
+                }, function () {
+                    battcn.closeWindow();
+                    battcn.reloadDiv('/op_list_[[${OP.menuId}]]');
+                });
+            }
+        }
+    });
+
+    /*]]>*/
+
+</script>
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <form class="form-horizontal m-t required-validate" th:id="@{menu{menuId}Form(menuId=${OP.menuId})}">
+            <input type="hidden" name="id" th:value="${dto?.id}"/>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">字典名称：</label>
+                <div class="col-sm-4">
+                    <input name="name" class="form-control" th:value="${dto?.name}"
+                           validate="{required:true,messages:{required:'请填写字典名称'}}"/>
+                </div>
+                <label class="col-sm-2 control-label">字典代码(唯一)：</label>
+                <div class="col-sm-4">
+                    <input name="code" class="form-control" th:value="${dto?.code}"
+                           validate="{required:true,messages:{required:'请填写字典代码'}}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">值设置（非必填）：</label>
+                <div class="col-sm-4">
+                    <input name="value" class="form-control" th:value="${dto?.value}"
+                    />
+                </div>
+
+                <label class="col-sm-2 control-label">所属分类：</label>
+                <div class="col-sm-4">
+                    <select class="form-control m-b" name="cate">
+                        <option value="">请选择分类</option>
+                        <option th:each="m : ${cates}" th:value="${m?.code}" th:selected="${m.code == dto?.cate}"
+                                th:text="${m.name}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">备注：</label>
+                <div class="col-sm-10">
+					<textarea id="remark" name="remark" cols="55" rows="3"
+                              class="form-control" th:text="${dto?.remark}"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+</html>

@@ -3274,6 +3274,7 @@ var cityJson = [
             function(i, val) {
                 if (val.item_code.substr(0, 2) == $(obj).val().substr(0, 2) && val.item_code.substr(2, 4) != '0000' && val.item_code.substr(4, 2) == '00') {
                     sb.append("<option value='" + val.item_code + "'>" + val.item_name + "</option>");
+
                 }
             });
         $("#choose" + id).after(sb.toString());
@@ -3303,7 +3304,6 @@ var cityJson = [
         //$("#chooseCounty").after(sb.toString());
 
     }
-
     function StringBuffer(str) {
         var arr = [];
         str = str || "";

@@ -11,9 +11,8 @@ import org.apache.ibatis.mapping.FetchType;
 import java.util.List;
 import java.util.Set;
 
-
 /**
- * @author Levin
+ * @author lmyhz
  */
 @Mapper
 public interface CompanyMapper extends BaseMapper<Company> {
@@ -27,4 +26,6 @@ public interface CompanyMapper extends BaseMapper<Company> {
             many = @Many(select = "com.battcn.platform.mapper.SendInfoMapper.selectByCompany",fetchType=FetchType.LAZY))})
     Company selectById(@Param("id") Integer id);
 
+    @Select("SELECT max(id) FROM t_bus_company")
+    Integer getMaxId();
 }

@@ -854,7 +854,7 @@ NDArray.prototype = {
     })()),
 
     /**
-     * Return the product of the array elements over the given axis.
+     * Return the bus.product of the array elements over the given axis.
      * @param  {Number} [axis] 
      * @param  {NDArray} out  
      * @return {NDArray}
@@ -1236,7 +1236,7 @@ NDArray.prototype = {
     })()),
 
     /**
-     * Return the cumulative product of the elements along the given axis.
+     * Return the cumulative bus.product of the elements along the given axis.
      * @param  {Number} [axis]
      * @param  {NDArray} out  
      * @return {NDArray}
@@ -1272,7 +1272,7 @@ NDArray.prototype = {
     })()),
 
     /**
-     * Dot product of two arrays.
+     * Dot bus.product of two arrays.
      * 
      * @param  {NDArray|Number} b
      * @param  {NDArray}        [out]

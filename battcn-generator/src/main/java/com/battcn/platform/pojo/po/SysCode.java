@@ -33,6 +33,11 @@ public class SysCode extends RecordEntity {
     private String cate;
 
     /**
+     * 备注
+     */
+    private String remark;
+
+    /**
      * 创建时间
      */
     @Column(name = "gmt_create")
@@ -132,6 +137,24 @@ public class SysCode extends RecordEntity {
      */
     public void setCate(String cate) {
         this.cate = cate == null ? null : cate.trim();
+    }
+
+    /**
+     * 获取备注
+     *
+     * @return remark - 备注
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * 设置备注
+     *
+     * @param remark 备注
+     */
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     /**

@@ -6958,3 +6958,21 @@ body.skin-3 {
 	width: 100%;
 	font-weight: 300;
 }
+.tree.well  {
+	height: 580px;
+	overflow:scroll;
+
+}
+.tree.well  ul{
+	list-style:none;
+	line-height: 30px;
+}
+.tree.well  ul.active {
+	background: #39aef5;
+	color: #fff;
+	border-radius:25px;
+	padding:2px 0;
+}
+.tree.well  li{
+	padding-left:18px;background:url('../img/locked.png') no-repeat left 5px;
+}

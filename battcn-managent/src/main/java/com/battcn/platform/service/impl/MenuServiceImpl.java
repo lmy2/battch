@@ -82,6 +82,8 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements MenuServic
 
     @Override
     public PageInfo<Menu> listMenuForDataGrid(DataGrid grid) {
+        grid.setPageNum(0);
+        grid.setPageSize(20);
         return PageHelper.startPage(grid.getPageNum(), grid.getPageSize()).doSelectPageInfo(this.menuMapper::listMenu);
     }
 

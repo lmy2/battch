@@ -104,6 +104,12 @@
             <version>3.5.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- poi end-->
 
     </dependencies>

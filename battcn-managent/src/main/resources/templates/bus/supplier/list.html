@@ -245,14 +245,18 @@
     };
 
     function pageInit() {
-        $.get("/codeList?code=BUS_SUPPLIER", function (data, status) {
+        $.get("/sys/dict/codeList?code=[[${SYS_CODE_TYPE}]]", function (data, status) {
+
             if (data && data.length >= 1) {
                 var sb = new StringBuffer();
                 $.each(data,
                     function (i, val) {
                         sb.append("<option value='" + val.code + "'>" + val.name + "</option>");
                     });
-                $("#code").after(sb.toString());
+                if ([[${SYS_CODE_TYPE}]] == 'BUS_SUPPLIER')
+                    $("#code").after(sb.toString());
+                else
+                    $("#code1").after(sb.toString());
             }
         });
     }
@@ -270,43 +274,49 @@
                 <div class="panel-body">
                     <form id="formSearch" class="form-horizontal">
                         <div class="form-group" style="margin-top: 15px">
-                            <label class="control-label col-sm-2">供应商类别</label>
+
+                            <label class="control-label col-sm-2"
+                                   th:text="${SYS_CODE_TYPE=='BUS_SUPPLIER'}? '供应商类别' :'客戶类别'"
+                            >
+                            </label>
                             <div class="col-sm-4">
                                 <select class="form-control" id="type" name="type">　　　　　　　　
-                                    <option id="code" value="">请选择类别</option>
+                                    <option th:id="${SYS_CODE_TYPE=='BUS_SUPPLIER'}? 'code' :'code1'"
+                                            value="">请选择类别
+                                    </option>
                                     　</select>
                             </div>
 
-                        <label class="control-label col-sm-2">省份</label>
-                        <div class="col-sm-4">
-                            <select class="form-control province" id="regAddressP"
-                                    name="regAddressP">
-                                　　　　　　　　
-                                <option class="choosePro" value="">请选择省份</option>
-                                　　　　　　</select>
+                            <label class="control-label col-sm-2">省份</label>
+                            <div class="col-sm-4">
+                                <select class="form-control province" id="regAddressP"
+                                        name="regAddressP">
+                                    　　　　　　　　
+                                    <option class="choosePro" value="">请选择省份</option>
+                                    　　　　　　</select>
+                            </div>
                         </div>
+                        <div class="btn-group" style="margin-top: 15px">
+
+                            <button type="button"
+                                    th:onclick="@{battcn.admin.menu{menuId}.search()(menuId=${OP.menuId})}"
+                                    class="btn btn-primary">查询
+                            </button>
+
+
+                        </div>
+                    </form>
                 </div>
-                <div class="btn-group" style="margin-top: 15px">
-
-                    <button type="button"
-                            th:onclick="@{battcn.admin.menu{menuId}.search()(menuId=${OP.menuId})}"
-                            class="btn btn-primary">查询
-                    </button>
-
-
-                </div>
-                </form>
+            </div>
+            <div th:include="toolbar :: toolbar-operate"></div>
+            <div class="table-responsive">
+                <table th:id="@{admin_menu{menuId}_datagrid(menuId=${OP.menuId})}"
+                       data-toolbar="#toolbar" data-show-refresh="true"
+                       data-show-toggle="true" data-show-columns="true"
+                       data-show-footer="false" data-mobile-responsive="true">
+                </table>
             </div>
         </div>
-        <div th:include="toolbar :: toolbar-operate"></div>
-        <div class="table-responsive">
-            <table th:id="@{admin_menu{menuId}_datagrid(menuId=${OP.menuId})}"
-                   data-toolbar="#toolbar" data-show-refresh="true"
-                   data-show-toggle="true" data-show-columns="true"
-                   data-show-footer="false" data-mobile-responsive="true">
-            </table>
-        </div>
     </div>
-</div>
 </div>
 </html>

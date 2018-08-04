@@ -20,7 +20,7 @@ public class SendInfo extends RecordEntity {
     /**
      * 发货联系人
      */
-    private Integer contact;
+    private String contact;
 
     /**
      * 发货地址省份
@@ -97,7 +97,7 @@ public class SendInfo extends RecordEntity {
      *
      * @return contact - 发货联系人
      */
-    public Integer getContact() {
+    public String getContact() {
         return contact;
     }
 
@@ -106,8 +106,8 @@ public class SendInfo extends RecordEntity {
      *
      * @param contact 发货联系人
      */
-    public void setContact(Integer contact) {
-        this.contact = contact;
+    public void setContact(String contact) {
+        this.contact = contact == null ? null : contact.trim();
     }
 
     /**

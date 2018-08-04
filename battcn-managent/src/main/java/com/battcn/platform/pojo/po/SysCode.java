@@ -37,6 +37,10 @@ public class SysCode extends RecordEntity {
     private String cate;
 
 
+    /**
+     * 所属类型
+     */
+    private String remark;
 
 
     /**
@@ -105,7 +109,16 @@ public class SysCode extends RecordEntity {
         this.cate = cate;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public void setValue(String value) {
+
         this.value = value;
 
     }

@@ -9,11 +9,8 @@ import com.battcn.platform.controller.BaseController;
 import com.battcn.platform.enums.EnumStatus;
 import com.battcn.platform.pojo.message.ApiResult;
 import com.battcn.platform.pojo.po.Company;
-import com.battcn.platform.pojo.po.Log;
-import com.battcn.platform.pojo.po.Menu;
 import com.battcn.platform.pojo.po.SendInfo;
 import com.battcn.platform.service.CompanyService;
-import com.battcn.platform.service.MenuService;
 import com.battcn.platform.service.SysCodeService;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
@@ -25,7 +22,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,19 +35,16 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
-import static com.battcn.framework.common.exception.BattcnException.notFound;
 
 
 /**
  * @author lmy
  */
 @Controller
-@RequestMapping("/bus/supplier")
-@Api(value = "供应商管理")
+@RequestMapping("/bus/custom")
+@Api(value = "客户管理")
 @ApiIgnore
-public class SupplierController
+public class CustomController
         extends BaseController {
     @Autowired
     private CompanyService companyService;
@@ -60,11 +53,11 @@ public class SupplierController
     private SysCodeService sysCodeService;
 
     @RequestMapping(value = "/list")
-    @BattcnLog(description = "进入供应商信息管理的页面", module = "业务管理-供应商信息管理", methods = "供应商信息列表")
-    @ApiOperation(value = "跳转供应商信息管理页面", hidden = true)
+    @BattcnLog(description = "进入客户信息管理的页面", module = "业务管理-客户信息管理", methods = "客户信息列表")
+    @ApiOperation(value = "跳转客户信息管理页面", hidden = true)
     public String list( HttpServletRequest request)
             throws BattcnException {
-        request.setAttribute("SYS_CODE_TYPE", "BUS_SUPPLIER");
+        request.setAttribute("SYS_CODE_TYPE", "BUS_CUSTOM");
         return "bus/supplier/list";
     }
 
@@ -77,7 +70,7 @@ public class SupplierController
     public PageInfo<Company> query(
             DataGrid grid, Company company) {
         //枚举类型无法转换
-        company.setFlag2(EnumStatus.SUPPLIER.getCode());
+        company.setFlag2(EnumStatus.CUSTOM.getCode());
         return this.companyService.listForDataGrid(grid, company);
     }
 
@@ -104,17 +97,17 @@ public class SupplierController
         company.setSendInfoSet(sendInfos);
         request.setAttribute("dto", company);
 
-        //下拉菜单--供应商类别2
-        request.setAttribute("BUS_SUPPLIER", this.sysCodeService.listByCate("BUS_SUPPLIER"));
+        //下拉菜单--客户类别2
+        request.setAttribute("BUS_SUPPLIER", this.sysCodeService.listByCate("BUS_CUSTOM"));
         return "bus/supplier/edit";
     }
 
-    @BattcnLog(module = "业务管理-供应商信息管理", methods = "保存供应商信息", description = "添加/修改供应商信息")
+    @BattcnLog(module = "业务管理-客户信息管理", methods = "保存客户信息", description = "添加/修改客户信息")
     @PostMapping(value = "/save")
     @ResponseBody
     public ApiResult<String> save(
             Company company) {
-        company.setFlag2(EnumStatus.SUPPLIER.getCode());
+        company.setFlag2(EnumStatus.CUSTOM.getCode());
         if (company != null) {
             this.companyService.saveOrUpdate(company);
         }
@@ -122,7 +115,7 @@ public class SupplierController
         return ApiResult.SUCCESS;
     }
 
-    @BattcnLog(module = "业务管理-供应商信息管理", methods = "删除供应商", description = "删除供应商信息")
+    @BattcnLog(module = "业务管理-客户信息管理", methods = "删除客户", description = "删除客户信息")
     @PostMapping(value = "/remove")
     @ResponseBody
     public ApiResult<String> del(
@@ -131,7 +124,7 @@ public class SupplierController
         return ApiResult.SUCCESS;
     }
 
-    @BattcnLog(module = "业务管理-供应商信息管理", methods = "停用供应商", description = "停用供应商信息")
+    @BattcnLog(module = "业务管理-客户信息管理", methods = "停用客户", description = "停用客户信息")
     @GetMapping(value = "/update")
     @ResponseBody
     public ApiResult<String> update(
@@ -153,9 +146,9 @@ public class SupplierController
             HttpServletResponse response)
             throws Exception {
 
-        Workbook workBook = ExcelExportUtil.exportExcel(new ExportParams("供应商信息", "供应商信息详情"),
+        Workbook workBook = ExcelExportUtil.exportExcel(new ExportParams("客户信息", "客户信息详情"),
                 Company.class, this.companyService.listAll());
-        String fileName = "供应商信息-" + DateFormatUtils.format(new Date(), "YYYY-MM-DD") + ".xlsx";
+        String fileName = "客户信息-" + DateFormatUtils.format(new Date(), "yyyy-MM-dd") + ".xlsx";
         response.addHeader("Content-Disposition",
                 "attachment;filename=" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1"));
         response.setContentType("application/vnd.ms-excel");

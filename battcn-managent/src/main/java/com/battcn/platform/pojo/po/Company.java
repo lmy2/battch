@@ -6,6 +6,7 @@ import com.battcn.platform.pojo.RecordEntity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 
@@ -373,14 +374,14 @@ public class Company extends RecordEntity {
         this.remark = remark == null ? null : remark.trim();
     }
 
-    private Set<SendInfo> sendInfoSet;
+    private List<SendInfo> sendInfoSet;
 
-    public Set<SendInfo> getSendInfoSet()
+    public List<SendInfo> getSendInfoSet()
     {
         return sendInfoSet;
     }
 
-    public void setSendInfoSet(Set<SendInfo> sendInfoSet)
+    public void setSendInfoSet(List<SendInfo> sendInfoSet)
     {
         this.sendInfoSet = sendInfoSet;
     }
